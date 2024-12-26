@@ -1,18 +1,3 @@
-// export type ILoginResponse = {
-//   user: User;
-//   token: string;
-// };
-
-// export type User = {
-//   _id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   role: string;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   __v: number;
-// };
 export interface ILoginResponse {
   user: User;
   token: string;
