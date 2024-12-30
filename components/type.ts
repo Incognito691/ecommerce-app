@@ -64,3 +64,18 @@ export interface ShippingAddress {
 //   status?: number;
 //   message?: string;
 // }
+
+export interface UserProfileData {
+  firstName: string;
+  lastName: string;
+  _id: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  status: string;
+  displayPicture: {
+    url: string;
+    ImgurId: string;
+  };
+}

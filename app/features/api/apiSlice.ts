@@ -1,4 +1,4 @@
-import { Product, CartItems, Order } from "@/components/type";
+import { Product, CartItems, Order, UserProfileData } from "@/components/type";
 import { ILoginResponse } from "@/types/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -13,7 +13,7 @@ export const productsApi = createApi({
     },
   }),
 
-  tagTypes: ["Product", "Orders"],
+  tagTypes: ["Product", "Orders", "Profile"],
   endpoints: (builder) => ({
     getProducts: builder.query<
       { products: Product[]; totalCount: number },
@@ -81,6 +81,28 @@ export const productsApi = createApi({
         };
       },
     }),
+    userProfile: builder.query<UserProfileData, void>({
+      query: () => {
+        return {
+          url: `/auth/me`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Profile"],
+    }),
+    updateProfilePicture: builder.mutation<
+      { displayPicture: { url: string } },
+      FormData
+    >({
+      query: (formData) => {
+        return {
+          url: `/profile/display-picture`,
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Profile"],
+    }),
     seeCarts: builder.query<{ items: CartItems[] }, void>({
       query: () => {
         return {
@@ -127,6 +149,8 @@ export const {
   useDeleteProductMutation,
   useUserLoginMutation,
   useUserSignUpMutation,
+  useUserProfileQuery,
+  useUpdateProfilePictureMutation,
   useSeeCartsQuery,
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,

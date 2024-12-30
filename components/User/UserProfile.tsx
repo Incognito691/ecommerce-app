@@ -1,72 +1,88 @@
 import { protectedApi } from "@/lib/api";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
+import {
+  useUpdateProfilePictureMutation,
+  useUserProfileQuery,
+} from "@/app/features/api/apiSlice";
+import { Loader } from "../ui/Loader";
 
-interface UserProfileData {
-  firstName: string;
-  lastName: string;
-  _id: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-  status: string;
-  displayPicture: {
-    url: string;
-  };
-}
+// interface UserProfileData {
+//   firstName: string;
+//   lastName: string;
+//   _id: string;
+//   email: string;
+//   role: string;
+//   createdAt: string;
+//   updatedAt: string;
+//   status: string;
+//   displayPicture: {
+//     url: string;
+//   };
+// }
 
 const UserProfile: React.FC = () => {
-  const [userProfile, setUserProfile] = useState<UserProfileData>({
-    firstName: "",
-    lastName: "",
-    _id: "",
-    email: "",
-    role: "",
-    createdAt: "",
-    updatedAt: "",
-    status: "",
-    displayPicture: {
-      url: "",
-    },
-  });
+  const { data: userProfileData, isLoading, error } = useUserProfileQuery();
+  const [updateProfilePicture] = useUpdateProfilePictureMutation();
+
+  // const [userProfile, setUserProfile] = useState<UserProfileData>({
+  //   firstName: "",
+  //   lastName: "",
+  //   _id: "",
+  //   email: "",
+  //   role: "",
+  //   createdAt: "",
+  //   updatedAt: "",
+  //   status: "",
+  //   displayPicture: {
+  //     url: "",
+  //   },
+  // });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append("image", file);
 
-    protectedApi
-      .patch("/profile/display-picture", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        setUserProfile((prev) => ({
-          ...prev,
-          displayPicture: response.data.displayPicture.url,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error uploading image:", error);
-      });
+    try {
+      await updateProfilePicture(formData).unwrap();
+    } catch (error) {
+      console.error("Error updating profile picture:", error);
+    }
   };
 
-  useEffect(() => {
-    protectedApi
-      .get("/auth/me")
-      .then((response) => {
-        setUserProfile(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching user profile:", error);
-      });
-  }, []);
+  if (isLoading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+
+  if (error) {
+    return <div className="text-red-500">Error loading profile</div>;
+  }
+
+  if (!userProfileData)
+    return <div className="text-red-500">No profile data available</div>;
+
+  const userProfile = userProfileData;
+
+  // useEffect(() => {
+  //   protectedApi
+  //     .get("/auth/me")
+  //     .then((response) => {
+  //       setUserProfile(response.data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching user profile:", error);
+  //     });
+  // }, []);
 
   const profilePictureSection = (
     <div className="flex flex-col items-center mb-8">
