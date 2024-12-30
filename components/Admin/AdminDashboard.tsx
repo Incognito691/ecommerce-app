@@ -92,7 +92,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 p-6">
+      <div className="flex-1 w-[calc(100%-18rem)] p-6">
         <div className="h-full rounded-xl bg-slate-800/30 backdrop-blur-sm border border-slate-700/30 p-6 shadow-lg">
           {activeTab === 0 && (
             <div className="animate-fadeIn">

@@ -117,6 +117,7 @@ const SeeOrderStatus: React.FC = () => {
     <div className="p-6 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen">
       <h2 className="text-4xl font-extrabold mb-6 text-gray-800 dark:text-gray-100 tracking-wide">
         Your Orders
+        <div className="h-1 w-20 bg-blue-500 mt-2 rounded-full"></div>
       </h2>
 
       <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg border border-gray-300 dark:border-gray-700 overflow-x-auto">
@@ -129,13 +130,13 @@ const SeeOrderStatus: React.FC = () => {
             <table className="w-full">
               <thead className="bg-gray-200 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
+                  <th className="px-4 py-3  text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
                     Order ID
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
+                  <th className="px-4 py-3  text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
                     Items
                   </th>
-                  <th className="px-4 py-3 text-left text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
+                  <th className="px-4 py-3  text-sm font-bold uppercase text-gray-700 dark:text-gray-300 text-center">
                     Tracking
                   </th>
                 </tr>
