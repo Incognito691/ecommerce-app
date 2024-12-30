@@ -1,4 +1,3 @@
-import { protectedApi } from "@/lib/api";
 import React, { useState } from "react";
 import {
   AlertDialog,
@@ -10,61 +9,59 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
+import { useDeleteOrderMutation } from "@/app/features/api/apiSlice";
+import { Order } from "@/components/type";
 
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface User {
+//   _id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   role: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
-interface Item {
-  product: string;
-  quantity: number;
-  price: number;
-  _id: string;
-}
+// interface Item {
+//   product: string;
+//   quantity: number;
+//   price: number;
+//   _id: string;
+// }
 
-interface ShippingAddress {
-  addressLine1: string;
-  country: string;
-  state: string;
-  city: string;
-  phone: number;
-  email: string;
-  zipCode: number;
-}
-interface Order {
-  _id: string;
-  user: User;
-  items: Item[];
-  totalAmount: number;
-  status: string;
-  createdAt: string;
-  shippingAddress: ShippingAddress;
-}
+// interface ShippingAddress {
+//   addressLine1: string;
+//   country: string;
+//   state: string;
+//   city: string;
+//   phone: number;
+//   email: string;
+//   zipCode: number;
+// }
+// interface Order {
+//   _id: string;
+//   user: User;
+//   items: Item[];
+//   totalAmount: number;
+//   status: string;
+//   createdAt: string;
+//   shippingAddress: ShippingAddress;
+// }
 const DeleteOrdersModal = (props: { order: Order; onSuccess: () => void }) => {
   const [showDialog, setShowDialog] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDeleteUpdate = () => {
-    protectedApi
-      .delete(`/orders/${props.order._id}`)
-      .then(() => {
-        props.onSuccess?.();
-        setShowDialog(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting product:", error);
-        setIsDeleting(false);
-      })
-      .finally(() => {
-        setIsDeleting(false);
-      });
+  const [deleteOrder, { isLoading: isDeleting }] = useDeleteOrderMutation();
+
+  const handleDeleteUpdate = async () => {
+    try {
+      await deleteOrder(props.order._id).unwrap();
+      props.onSuccess?.();
+      setShowDialog(false);
+    } catch (error) {
+      console.error("Error deleting order:", error);
+    }
   };
+
   return (
     <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
       <AlertDialogTrigger asChild>
@@ -93,13 +90,7 @@ const DeleteOrdersModal = (props: { order: Order; onSuccess: () => void }) => {
           </svg>
         </button>
       </AlertDialogTrigger>
-      <AlertDialogContent
-        className="w-full max-w-md rounded-xl 
-                       bg-white dark:bg-gray-900 
-                       border border-gray-200 dark:border-gray-800 
-                       shadow-2xl dark:shadow-red-500/10 
-                       p-6 space-y-6"
-      >
+      <AlertDialogContent className="w-full max-w-md rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-2xl dark:shadow-red-500/10 p-6 space-y-6">
         <AlertDialogHeader className="space-y-2">
           <AlertDialogTitle
             className="text-2xl font-bold text-gray-900 dark:text-white 

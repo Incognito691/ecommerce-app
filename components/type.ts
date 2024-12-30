@@ -15,3 +15,52 @@ export interface Images {
   imgurUrl: string;
   altText: string;
 }
+
+export interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
+export interface Item {
+  product: string;
+  quantity: number;
+  price: number;
+  _id: string;
+}
+
+export interface Order {
+  _id: string;
+  user: User;
+  items: Item[];
+  totalAmount: number;
+  status: string;
+  createdAt: string;
+  shippingAddress: ShippingAddress;
+}
+
+export interface CartItems {
+  product: Product;
+  quantity: number;
+  _id: string;
+}
+
+export interface ShippingAddress {
+  addressLine1: string;
+  country: string;
+  state: string;
+  city: string;
+  phone: number;
+  email: string;
+  zipCode: number;
+}
+
+// export interface ApiError {
+//   data?: {
+//     message?: string;
+//     [key: string]: any;
+//   };
+//   status?: number;
+//   message?: string;
+// }

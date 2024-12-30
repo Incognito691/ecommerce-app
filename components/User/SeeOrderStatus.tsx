@@ -1,7 +1,5 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { protectedApi } from "@/lib/api";
 import {
   Clock,
   CheckCircle2,
@@ -10,29 +8,31 @@ import {
   Truck,
   ArrowRightFromLine,
 } from "lucide-react";
+import { useGetOrdersQuery } from "@/app/features/api/apiSlice";
+import { Loader } from "../ui/Loader";
 
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+// interface User {
+//   _id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+// }
 
-interface Item {
-  product: string;
-  quantity: number;
-  price: number;
-  _id: string;
-}
+// interface Item {
+//   product: string;
+//   quantity: number;
+//   price: number;
+//   _id: string;
+// }
 
-interface Order {
-  _id: string;
-  user: User;
-  items: Item[];
-  totalAmount: number;
-  status: string;
-  createdAt: string;
-}
+// interface Order {
+//   _id: string;
+//   user: User;
+//   items: Item[];
+//   totalAmount: number;
+//   status: string;
+//   createdAt: string;
+// }
 
 const statuses = [
   {
@@ -73,33 +73,45 @@ const statuses = [
 ];
 
 const SeeOrderStatus: React.FC = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: orderData, isLoading, error } = useGetOrdersQuery();
+  const orders = orderData?.orders || [];
 
-  useEffect(() => {
-    fetchUserOrders();
-  }, []);
+  // const [orders, setOrders] = useState<Order[]>([]);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  const fetchUserOrders = () => {
-    protectedApi
-      .get("/orders")
-      .then((response) => {
-        if (Array.isArray(response.data.orders)) {
-          setOrders(response.data.orders);
-        } else {
-          setError("Unexpected response format");
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message || "Failed to fetch orders");
-        setLoading(false);
-      });
-  };
+  // useEffect(() => {
+  //   fetchUserOrders();
+  // }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  // const fetchUserOrders = () => {
+  //   protectedApi
+  //     .get("/orders")
+  //     .then((response) => {
+  //       if (Array.isArray(response.data.orders)) {
+  //         setOrders(response.data.orders);
+  //       } else {
+  //         setError("Unexpected response format");
+  //       }
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message || "Failed to fetch orders");
+  //       setLoading(false);
+  //     });
+  // };
+
+  if (isLoading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div className="text-red-500">Error: loading orders</div>;
+  }
 
   return (
     <div className="p-6 max-w-7xl mx-auto bg-gray-50 dark:bg-gray-900 min-h-screen">

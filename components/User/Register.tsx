@@ -11,42 +11,70 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { api } from "@/lib/api";
 import { ILoginResponse } from "@/types/user";
 import { useRouter } from "next/navigation";
-import { User, Mail, Lock, UserCircle } from "lucide-react"; // Import icons
+import { User, Mail, Lock, UserCircle } from "lucide-react";
+import { useUserSignUpMutation } from "@/app/features/api/apiSlice";
+import { Loader } from "../ui/Loader";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object({
+  userFirstName: Yup.string()
+    .required("First name is required")
+    .min(3, "First name must be at least 3 characters"),
+  userLastName: Yup.string()
+    .required("Last name is required")
+    .min(3, "Last name must be at least 3 characters"),
+  userEmail: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
+  userPassword: Yup.string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters"),
+});
 
 const Register = () => {
-  const [showDialog, setShowDialog] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
-  const [userFirstName, setUserFirstName] = useState("");
-  const [userLastName, setUserLastName] = useState("");
-
   const router = useRouter();
+  const [userSignUp, { isLoading }] = useUserSignUpMutation();
+  const [showDialog, setShowDialog] = useState(false);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-    const token = api.post("/auth/signup", {
-      firstName: userFirstName,
-      lastName: userLastName,
-      email: userEmail,
-      password: userPassword,
-    });
-    token
-      .then((response) => {
-        console.log(response.data);
-        if (!!response.data) {
-          const user: ILoginResponse = response.data;
+  const formik = useFormik({
+    initialValues: {
+      userFirstName: "",
+      userLastName: "",
+      userEmail: "",
+      userPassword: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      try {
+        const response = await userSignUp({
+          firstName: values.userFirstName,
+          lastName: values.userLastName,
+          email: values.userEmail,
+          password: values.userPassword,
+        }).unwrap();
+
+        if (response !== undefined && response.token) {
+          const user: ILoginResponse = response;
           localStorage.setItem("token", user.token);
-          router.push("/user/login");
+          router.push("/login");
         }
-      })
-      .catch((error) => {
-        console.log(error?.response?.data?.error || "Somethig Went Wrong");
+      } catch (error) {
+        console.log(error || "Something Went Wrong");
         setShowDialog(true);
-      });
-  };
+      }
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-indigo-900 flex items-center justify-center p-4">
@@ -61,7 +89,7 @@ const Register = () => {
             </p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={formik.handleSubmit} className="space-y-6">
             <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
               <AlertDialogContent className="bg-gray-800 border border-gray-700">
                 <AlertDialogHeader>
@@ -91,11 +119,23 @@ const Register = () => {
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
-                  value={userFirstName}
-                  onChange={(event) => setUserFirstName(event.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400"
+                  id="userFirstName"
+                  {...formik.getFieldProps("userFirstName")}
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400 ${
+                    formik.touched.userFirstName && formik.errors.userFirstName
+                      ? "border-red-500"
+                      : ""
+                  }`}
                   placeholder="Enter your first name"
                 />
+                <div>
+                  {formik.touched.userFirstName &&
+                    formik.errors.userFirstName && (
+                      <div className="text-red-500 text-sm mt-1">
+                        {formik.errors.userFirstName}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
 
@@ -107,11 +147,23 @@ const Register = () => {
                 <UserCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="text"
-                  value={userLastName}
-                  onChange={(event) => setUserLastName(event.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400"
+                  id="userLastName"
+                  {...formik.getFieldProps("userLastName")}
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400 ${
+                    formik.touched.userLastName && formik.errors.userLastName
+                      ? "border-red-500"
+                      : ""
+                  }`}
                   placeholder="Enter your last name"
                 />
+                <div>
+                  {formik.touched.userLastName &&
+                    formik.errors.userLastName && (
+                      <div className="text-red-500 text-sm mt-1">
+                        {formik.errors.userLastName}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
 
@@ -123,11 +175,22 @@ const Register = () => {
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="email"
-                  value={userEmail}
-                  onChange={(event) => setUserEmail(event.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400"
-                  placeholder="Enter your email"
+                  id="userEmail"
+                  {...formik.getFieldProps("userEmail")}
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400 ${
+                    formik.touched.userEmail && formik.errors.userEmail
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                  placeholder="example00@gmail.com"
                 />
+                <div>
+                  {formik.touched.userEmail && formik.errors.userEmail && (
+                    <div className="text-red-500 text-sm mt-1">
+                      {formik.errors.userEmail}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -139,16 +202,27 @@ const Register = () => {
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
                 <input
                   type="password"
-                  value={userPassword}
-                  onChange={(event) => setUserPassword(event.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400"
+                  id="userPassword"
+                  {...formik.getFieldProps("userPassword")}
+                  className={`w-full pl-10 pr-4 py-3 bg-gray-700/30 border border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-200 placeholder-gray-400 ${
+                    formik.touched.userPassword && formik.errors.userPassword
+                      ? "border-red-500"
+                      : ""
+                  }`}
                   placeholder="Enter your password"
                 />
+                <div>
+                  {formik.touched.userPassword &&
+                    formik.errors.userPassword && (
+                      <div className="text-red-500 text-sm mt-1">
+                        {formik.errors.userPassword}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
 
             <button
-              onClick={handleSubmit}
               type="submit"
               className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-purple-600 text-white font-semibold py-3.5 px-6 rounded-xl
                 transform transition-all duration-200 ease-in-out hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]

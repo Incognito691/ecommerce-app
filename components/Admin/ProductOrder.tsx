@@ -1,79 +1,100 @@
-import React, { useEffect, useState } from "react";
-import { protectedApi } from "@/lib/api";
 import DeleteOrdersModal from "../DeleteOrdersModal";
+import {
+  useGetOrdersQuery,
+  useUpdateOrderStatusMutation,
+} from "@/app/features/api/apiSlice";
+import { Loader } from "../ui/Loader";
 
-interface User {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface User {
+//   _id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   role: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
-interface Item {
-  product: string;
-  quantity: number;
-  price: number;
-  _id: string;
-}
+// interface Item {
+//   product: string;
+//   quantity: number;
+//   price: number;
+//   _id: string;
+// }
 
-interface ShippingAddress {
-  addressLine1: string;
-  country: string;
-  state: string;
-  city: string;
-  phone: number;
-  email: string;
-  zipCode: number;
-}
+// interface ShippingAddress {
+//   addressLine1: string;
+//   country: string;
+//   state: string;
+//   city: string;
+//   phone: number;
+//   email: string;
+//   zipCode: number;
+// }
 
-interface Order {
-  _id: string;
-  user: User;
-  items: Item[];
-  totalAmount: number;
-  status: string;
-  createdAt: string;
-  shippingAddress: ShippingAddress;
-}
+// interface Order {
+//   _id: string;
+//   user: User;
+//   items: Item[];
+//   totalAmount: number;
+//   status: string;
+//   createdAt: string;
+//   shippingAddress: ShippingAddress;
+// }
 
 const ProductOrder = () => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data: ordersData, isLoading, error } = useGetOrdersQuery();
+  const orders = ordersData?.orders || [];
+  const [updateOrderStatus] = useUpdateOrderStatusMutation();
+  // const [orders, setOrders] = useState<Order[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    protectedApi
-      .get("/orders")
-      .then((response) => {
-        if (Array.isArray(response.data.orders)) {
-          setOrders(response.data.orders);
-        } else {
-          setError("Unexpected response format");
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setError(error.message || "Failed to fetch orders");
-        setLoading(false);
+  // useEffect(() => {
+  //   protectedApi
+  //     .get("/orders")
+  //     .then((response) => {
+  //       if (Array.isArray(response.data.orders)) {
+  //         setOrders(response.data.orders);
+  //       } else {
+  //         setError("Unexpected response format");
+  //       }
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message || "Failed to fetch orders");
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  const handleStatusChange = async (orderId: string, newStatus: string) => {
+    try {
+      // Log the attempt
+      console.log("Attempting to update status:", { orderId, newStatus });
+
+      const result = await updateOrderStatus({
+        orderId,
+        status: newStatus,
+      }).unwrap();
+
+      console.log("Update successful:", result);
+    } catch (error: any) {
+      console.error("Failed to update order status:", {
+        error: error?.data || error?.message || error,
+        status: error?.status,
+        orderId,
+        newStatus,
       });
-  }, []);
-
-  const handleStatusChange = (orderId: string, newStatus: string) => {
-    setOrders((prevOrders) =>
-      prevOrders.map((order) =>
-        order._id === orderId ? { ...order, status: newStatus } : order
-      )
-    );
-
-    protectedApi.patch(`/orders/${orderId}`, { status: newStatus });
-    console.log("Failed to update order status", error);
+    }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (isLoading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  if (error) return <div className="text-red-500">Error: Loading orders</div>;
 
   return (
     <div className="p-8 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">

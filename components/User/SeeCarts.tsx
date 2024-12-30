@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Product } from "@/components/type";
-import { protectedApi } from "@/lib/api";
+// import { Product } from "@/components/type";
 import SetOrderModal from "@/components/SetOrderModal";
+import { useSeeCartsQuery } from "@/app/features/api/apiSlice";
+import { Loader } from "../ui/Loader";
 
-interface CartItems {
-  product: Product;
-  quantity: number;
-  _id: string;
-}
+// interface CartItems {
+//   product: Product;
+//   quantity: number;
+//   _id: string;
+// }
 
 const SeeCarts = () => {
-  const [cartItems, setCartItems] = useState<CartItems[]>([]);
+  // const [cartItems, setCartItems] = useState<CartItems[]>([]);
   // const [products, setProducts] = useState<Product[]>([]);
 
   // useEffect(() => {
@@ -20,12 +20,26 @@ const SeeCarts = () => {
   //     .catch((error) => console.error(error));
   // }, []);
 
-  useEffect(() => {
-    protectedApi
-      .get("/cart")
-      .then((response) => setCartItems(response.data.items))
-      .catch((error) => console.error(error));
-  }, []);
+  const { data: cartData, isLoading, error } = useSeeCartsQuery();
+
+  const cartItems = cartData?.items || [];
+
+  if (isLoading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+
+  if (error) {
+    return <div className="text-red-500">Error loading cart items</div>;
+  }
+  // useEffect(() => {
+  //   protectedApi
+  //     .get("/cart")
+  //     .then((response) => setCartItems(response.data.items))
+  //     .catch((error) => console.error(error));
+  // }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -1,4 +1,4 @@
-import { Product } from "@/components/type";
+import { Product, CartItems, Order } from "@/components/type";
 import { ILoginResponse } from "@/types/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -13,7 +13,7 @@ export const productsApi = createApi({
     },
   }),
 
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "Orders"],
   endpoints: (builder) => ({
     getProducts: builder.query<
       { products: Product[]; totalCount: number },
@@ -69,6 +69,54 @@ export const productsApi = createApi({
         };
       },
     }),
+    userSignUp: builder.mutation<
+      ILoginResponse,
+      { firstName: string; lastName: string; email: string; password: string }
+    >({
+      query: (arg) => {
+        return {
+          url: `/auth/signup`,
+          method: "POST",
+          body: arg,
+        };
+      },
+    }),
+    seeCarts: builder.query<{ items: CartItems[] }, void>({
+      query: () => {
+        return {
+          url: `/cart`,
+          method: "GET",
+        };
+      },
+    }),
+    getOrders: builder.query<{ orders: Order[] }, void>({
+      query: () => {
+        return {
+          url: `/orders`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Orders"],
+    }),
+    updateOrderStatus: builder.mutation<
+      Order,
+      { orderId: string; status: string }
+    >({
+      query: ({ orderId, status }) => ({
+        url: `/orders/${orderId}`,
+        method: "PATCH",
+        body: { status },
+      }),
+      invalidatesTags: ["Orders"],
+      transformResponse: (response: Order) => response,
+    }),
+    deleteOrder: builder.mutation<void, string>({
+      query: (orderId) => ({
+        url: `/orders/${orderId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Orders"],
+    }),
   }),
 });
 
@@ -78,4 +126,9 @@ export const {
   usePostProductMutation,
   useDeleteProductMutation,
   useUserLoginMutation,
+  useUserSignUpMutation,
+  useSeeCartsQuery,
+  useGetOrdersQuery,
+  useUpdateOrderStatusMutation,
+  useDeleteOrderMutation,
 } = productsApi;
