@@ -165,11 +165,11 @@ const UserProfile: React.FC = () => {
             <p className="text-gray-300 text-lg mb-2">
               Created At: {new Date(userProfile.createdAt).toLocaleString()}
             </p>
-            <p className="text-indigo-300 text-lg">
+            <p className="text-indigo-300 text-lg mb-2">
               Updated At: {new Date(userProfile.updatedAt).toLocaleString()}
             </p>
             <p className="text-indigo-300 text-lg">
-              Status: <span className="text-green-500">Active</span>{" "}
+              Status: <span className="text-green-500">Active</span>
             </p>
           </div>
         </div>
