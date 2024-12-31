@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import parse from "html-react-parser";
-import EditProductModal from "@/components/EditProductModal";
-import DeleteProductModal from "@/components/DeleteProductModal";
+import EditProductModal from "@/components/Modal/EditProductModal";
+import DeleteProductModal from "@/components/Modal/DeleteProductModal";
 // import { Product } from "@/components/type";
 import {
   Pagination,
@@ -18,7 +18,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import AddItemBtn from "../ui/AddItemBtn";
 import noImage from "@/public/NoImage.jpg";
-import { useGetProductsQuery } from "@/app/features/api/apiSlice";
+import { useGetProductsQuery } from "@/app/features/api/ProductsApi";
 import { Loader } from "../ui/Loader";
 
 const ProductLists = () => {

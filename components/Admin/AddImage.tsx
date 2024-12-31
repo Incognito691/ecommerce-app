@@ -1,9 +1,14 @@
 "use client";
 
-import { protectedApi } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import SeeImages from "@/components/Admin/SeeImages";
 import Image from "next/image";
+import {
+  useGetImageQuery,
+  useUploadImageMutation,
+} from "@/app/features/api/ImageApi";
+import { ImageType } from "../type";
+import { useSearchParams } from "next/navigation";
 
 interface ImageData {
   altText: string;
@@ -13,10 +18,19 @@ interface ImageData {
 }
 
 interface Props {
-  onImageData?: (data: File | string | null) => void;
+  onImageData?: (imageData: ImageType) => void;
 }
 
 const AddImage: React.FC<Props> = ({ onImageData }) => {
+  const searchParams = useSearchParams();
+  const currentPage = searchParams.get("page") || "1";
+
+  const {
+    data: images,
+    isLoading,
+    refetch,
+  } = useGetImageQuery({ page: currentPage });
+
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [imageData, setImageData] = useState<ImageData>({
@@ -25,6 +39,7 @@ const AddImage: React.FC<Props> = ({ onImageData }) => {
     albumId: "67481bc3c7a61f4e9858bfa7",
     image: new File([], ""),
   });
+  const [uploadImage, { isLoading: isUploading }] = useUploadImageMutation();
 
   const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -36,6 +51,7 @@ const AddImage: React.FC<Props> = ({ onImageData }) => {
 
       if (!file.type.startsWith("image/")) {
         alert("Please select an image file.");
+        return;
       }
 
       const objectUrl = URL.createObjectURL(file);
@@ -54,9 +70,7 @@ const AddImage: React.FC<Props> = ({ onImageData }) => {
     e.preventDefault();
 
     try {
-      if (!selectedImage) {
-        throw new Error("No file selected");
-      }
+      if (!selectedImage) return;
 
       const formData = new FormData();
       console.log(formData, "sdsd");
@@ -65,23 +79,16 @@ const AddImage: React.FC<Props> = ({ onImageData }) => {
       formData.append("tags", JSON.stringify(imageData.tags));
       formData.append("albumId", imageData.albumId);
 
-      const response = await protectedApi.post("/images", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        timeout: 30000,
-        validateStatus: (status) => status === 201 || status === 200,
-      });
-
-      console.log("The Response is:", response);
-      onImageData?.(response.data);
-
+      const response = await uploadImage(formData).unwrap();
+      if (onImageData) {
+        onImageData(response.image);
+      }
       resetForm();
+      refetch();
     } catch (error) {
+      console.log(error);
       if (error instanceof Error) {
         console.error("Error uploading image:", error.message);
-      } else {
-        console.error("An unexpected error occurred");
       }
 
       if (previewImage) {
@@ -217,12 +224,18 @@ const AddImage: React.FC<Props> = ({ onImageData }) => {
         </div>
         <button
           type="submit"
-          className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-300 font-semibold"
+          className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors duration-300 font-semibold"
+          disabled={isUploading || !selectedImage}
         >
-          Upload Image
+          {isUploading ? "Uploading..." : "Upload Image"}
         </button>
       </div>
-      <SeeImages />
+      <SeeImages
+        images={images}
+        isLoading={isLoading}
+        refetch={refetch}
+        currentPage={currentPage}
+      />
     </form>
   );
 };

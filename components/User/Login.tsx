@@ -14,7 +14,7 @@ import {
 import { ILoginResponse } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
-import { useUserLoginMutation } from "@/app/features/api/apiSlice";
+import { useUserLoginMutation } from "@/app/features/api/ProfileApi";
 
 const Login = () => {
   const [userData, setUserData] = React.useState({

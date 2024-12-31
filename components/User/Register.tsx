@@ -14,7 +14,7 @@ import {
 import { ILoginResponse } from "@/types/user";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, UserCircle } from "lucide-react";
-import { useUserSignUpMutation } from "@/app/features/api/apiSlice";
+import { useUserSignUpMutation } from "@/app/features/api/ProfileApi";
 import { Loader } from "../ui/Loader";
 import { useFormik } from "formik";
 import * as Yup from "yup";

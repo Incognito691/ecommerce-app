@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import {
   useUpdateProfilePictureMutation,
   useUserProfileQuery,
-} from "@/app/features/api/apiSlice";
+} from "@/app/features/api/ProfileApi";
 import { Loader } from "../ui/Loader";
 
 // interface UserProfileData {

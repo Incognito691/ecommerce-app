@@ -14,7 +14,7 @@ import { protectedApi } from "@/lib/api";
 import ImageSelectionModal from "./ImageSelectionModal";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
-import { useEditProductMutation } from "@/app/features/api/apiSlice";
+import { useEditProductMutation } from "@/app/features/api/ProductsApi";
 
 interface Product {
   _id: number;

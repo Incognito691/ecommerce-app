@@ -10,32 +10,30 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { protectedApi } from "@/lib/api";
-import { ImageData } from "@/components/Admin/SeeImages";
+import { useDeleteImageMutation } from "@/app/features/api/ImageApi";
+import { ImageResponse, ImageType } from "../type";
 
 interface DeleteImagesProps {
-  images: ImageData;
+  images: ImageType;
   onSuccess: () => void;
 }
 
 const DeleteImageModal = (props: DeleteImagesProps) => {
   const [showDialog, setShowDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteImage] = useDeleteImageMutation();
 
-  const handleDeleteUpdate = () => {
-    protectedApi
-      .delete(`/images/${props.images._id}`)
-      .then(() => {
-        props.onSuccess();
-        setShowDialog(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting product:", error);
-        setIsDeleting(false);
-      })
-      .finally(() => {
-        setIsDeleting(false);
-      });
+  const handleDeleteUpdate = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteImage(props.images._id.toString()).unwrap();
+      props.onSuccess();
+      setShowDialog(false);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (

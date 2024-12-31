@@ -56,15 +56,6 @@ export interface ShippingAddress {
   zipCode: number;
 }
 
-// export interface ApiError {
-//   data?: {
-//     message?: string;
-//     [key: string]: any;
-//   };
-//   status?: number;
-//   message?: string;
-// }
-
 export interface UserProfileData {
   firstName: string;
   lastName: string;
@@ -78,4 +69,23 @@ export interface UserProfileData {
     url: string;
     ImgurId: string;
   };
+}
+
+export interface ImageResponse {
+  images: ImageType[];
+  pagination: {
+    totalPages: number;
+  };
+}
+
+export interface ImageType {
+  _id: string;
+  albumId: string;
+  imgurId: string;
+  imgurDeleteHash: string;
+  imgurUrl: string;
+  altText: string;
+  tags: string[];
+  createdAt: Date;
+  __v: number;
 }

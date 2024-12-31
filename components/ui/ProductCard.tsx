@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { Product } from "@/components/type";
-import AddToCartModal from "@/components/AddToCartModal";
+import AddToCartModal from "@/components/Modal/AddToCartModal";
 import parse from "html-react-parser";
 import noImage from "@/public/NoImage.jpg";
 

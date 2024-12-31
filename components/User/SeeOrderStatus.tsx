@@ -8,7 +8,7 @@ import {
   Truck,
   ArrowRightFromLine,
 } from "lucide-react";
-import { useGetOrdersQuery } from "@/app/features/api/apiSlice";
+import { useGetOrdersQuery } from "@/app/features/api/OrderApi";
 import { Loader } from "../ui/Loader";
 
 // interface User {

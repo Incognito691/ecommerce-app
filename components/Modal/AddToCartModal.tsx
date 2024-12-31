@@ -8,13 +8,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "./ui/alert-dialog";
-import AddToCartBtn from "./ui/AddToCartBtn";
-
-interface Product {
-  _id: number;
-  title: string;
-}
+} from "../ui/alert-dialog";
+import AddToCartBtn from "../ui/AddToCartBtn";
+import { useAddCartMutation } from "@/app/features/api/CartApi";
+import { Product } from "../type";
 
 interface AddToCartModalProps {
   product: Product;
@@ -24,12 +21,11 @@ const AddToCartModal = ({ product }: AddToCartModalProps) => {
   const [showDialog, setShowDialog] = useState(false);
   const [quantity, setQuantity] = useState(1);
 
+  const [addCart, { isLoading }] = useAddCartMutation();
+
   const handleCartUpdate = () => {
-    protectedApi
-      .post("/cart/add/", {
-        productId: product._id,
-        quantity: quantity,
-      })
+    addCart({ productId: product._id, quantity: quantity })
+      .unwrap()
       .then(() => {
         setShowDialog(false);
         setQuantity(1);

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/pagination";
 import { useRouter, useSearchParams } from "next/navigation";
 import ProductCard from "../ui/ProductCard";
-import { useGetProductsQuery } from "@/app/features/api/apiSlice";
+import { useGetProductsQuery } from "@/app/features/api/ProductsApi";
 import { Loader } from "../ui/Loader";
 
 const Products = () => {

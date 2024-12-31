@@ -9,7 +9,7 @@ import {
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
-import { useDeleteProductMutation } from "@/app/features/api/apiSlice";
+import { useDeleteProductMutation } from "@/app/features/api/ProductsApi";
 
 interface Product {
   _id: number;

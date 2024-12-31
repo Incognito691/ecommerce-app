@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ModeToggle } from "./theme-button";
+import { ModeToggle } from "./ui/theme-button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

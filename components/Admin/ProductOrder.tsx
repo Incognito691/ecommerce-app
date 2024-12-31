@@ -1,8 +1,8 @@
-import DeleteOrdersModal from "../DeleteOrdersModal";
+import DeleteOrdersModal from "../Modal/DeleteOrdersModal";
 import {
   useGetOrdersQuery,
   useUpdateOrderStatusMutation,
-} from "@/app/features/api/apiSlice";
+} from "@/app/features/api/OrderApi";
 import { Loader } from "../ui/Loader";
 
 // interface User {

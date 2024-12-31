@@ -1,6 +1,6 @@
 import { protectedApi } from "@/lib/api";
 import { useState } from "react";
-import { Product } from "./type";
+import { Product } from "../type";
 import {
   AlertDialog,
   AlertDialogTrigger,

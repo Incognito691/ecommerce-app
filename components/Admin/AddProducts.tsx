@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Editor, { ContentEditableEvent } from "react-simple-wysiwyg";
 import Backbtn from "../ui/backbtn";
-import { usePostProductMutation } from "@/app/features/api/apiSlice";
+import { usePostProductMutation } from "@/app/features/api/ProductsApi";
 
 const AddProducts = () => {
   const [products, setProducts] = useState<{

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { api } from "@/lib/api";
-import DeleteImageModal from "@/components/DeleteImageModal";
+import DeleteImageModal from "@/components/Modal/DeleteImageModal";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Pagination,
@@ -11,63 +10,48 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Loader } from "@/components/ui/Loader";
+import { ImageResponse, ImageType } from "../type";
 
-export interface ImageData {
-  imgurUrl: string;
-  altText: string;
-  _id: string;
+interface Props {
+  images: ImageResponse | undefined;
+  isLoading: boolean;
+  refetch: () => void;
+  currentPage: string;
 }
 
-const SeeImages = () => {
-  const [images, setImages] = useState<ImageData[]>([]);
-  const [loading, setLoading] = useState(true);
+const SeeImages = ({ images, isLoading, refetch, currentPage }: Props) => {
   const [totalPages, setTotalPages] = useState(1);
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const currentPage = searchParams.get("page") || "1";
   const productsPerPage = 12;
 
   useEffect(() => {
-    api
-      .get(`/images?page=${currentPage}&limit=${productsPerPage}`)
-      .then((response) => {
-        console.log("Images response:", response.data);
-        setTotalPages(Math.ceil(response.data.totalCount / productsPerPage));
-        setImages(response.data.images);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching images:", error);
-        setLoading(false);
-      });
-  }, [currentPage]);
+    if (images) {
+      setTotalPages(Math.ceil(images.images.length / productsPerPage));
+    }
+  }, [images]);
 
   const handlePageChange = (page: number) => {
     router.push(`/admin/admindashboard?tab=imageupload&page=${page}`);
   };
 
-  if (loading) return <div>Loading images...</div>;
-
+  if (isLoading)
+    return (
+      <div>
+        <Loader />
+      </div>
+    );
+  console.log(images);
   return (
     <div className="p-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
-      <h2
-        className="text-3xl font-extrabold mb-6 text-gray-800 dark:text-white 
-                 border-b pb-3 border-gray-200 dark:border-gray-700"
-      >
+      <h2 className="text-3xl font-extrabold mb-6 text-gray-800 dark:text-white border-b pb-3 border-gray-200 dark:border-gray-700">
         Posted Images
       </h2>
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {images.map((image) => (
+        {images?.images?.map((image: ImageType) => (
           <div
             key={image._id}
-            className="bg-white dark:bg-gray-800 
-                   border border-gray-200 dark:border-gray-700 
-                   rounded-xl 
-                   shadow-md hover:shadow-xl 
-                   transition-all duration-300 
-                   transform hover:-translate-y-2 
-                   overflow-hidden 
-                   flex flex-col"
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden flex flex-col"
           >
             <div className="relative w-full pt-[75%]">
               <Image
@@ -76,10 +60,7 @@ const SeeImages = () => {
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 priority={true}
-                className="absolute inset-0 object-contain 
-                       group-hover:scale-105 
-                       transition-transform 
-                       duration-300"
+                className="absolute inset-0 object-contain group-hover:scale-105 transition-transform duration-300"
               />
             </div>
             <div className="p-4 flex-grow flex flex-col justify-between">
@@ -96,9 +77,7 @@ const SeeImages = () => {
                 <DeleteImageModal
                   images={image}
                   onSuccess={() => {
-                    setImages(
-                      images.filter((preImg) => preImg._id !== image._id)
-                    );
+                    refetch();
                   }}
                 />
               </div>
@@ -111,10 +90,7 @@ const SeeImages = () => {
           <PaginationItem>
             <PaginationPrevious
               onClick={() => handlePageChange(parseInt(currentPage) - 1)}
-              className="px-4 py-2 rounded-md 
-                     bg-gray-100 dark:bg-gray-800 
-                     hover:bg-gray-200 dark:hover:bg-gray-700 
-                     transition-colors duration-300"
+              className="px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
             />
           </PaginationItem>
           {Array.from({ length: totalPages }, (_, i) => (
@@ -130,17 +106,14 @@ const SeeImages = () => {
                             : "bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
                         }`}
               >
-                {i + 1}
+                {currentPage}
               </PaginationLink>
             </PaginationItem>
           ))}
           <PaginationItem>
             <PaginationNext
               onClick={() => handlePageChange(parseInt(currentPage) + 1)}
-              className="px-4 py-2 rounded-md 
-                     bg-gray-100 dark:bg-gray-800 
-                     hover:bg-gray-200 dark:hover:bg-gray-700 
-                     transition-colors duration-300"
+              className="px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-300"
             />
           </PaginationItem>
         </PaginationContent>

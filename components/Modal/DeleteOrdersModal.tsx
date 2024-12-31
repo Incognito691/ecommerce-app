@@ -9,44 +9,9 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from "@/components/ui/alert-dialog";
-import { useDeleteOrderMutation } from "@/app/features/api/apiSlice";
+import { useDeleteOrderMutation } from "@/app/features/api/OrderApi";
 import { Order } from "@/components/type";
 
-// interface User {
-//   _id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   role: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// interface Item {
-//   product: string;
-//   quantity: number;
-//   price: number;
-//   _id: string;
-// }
-
-// interface ShippingAddress {
-//   addressLine1: string;
-//   country: string;
-//   state: string;
-//   city: string;
-//   phone: number;
-//   email: string;
-//   zipCode: number;
-// }
-// interface Order {
-//   _id: string;
-//   user: User;
-//   items: Item[];
-//   totalAmount: number;
-//   status: string;
-//   createdAt: string;
-//   shippingAddress: ShippingAddress;
-// }
 const DeleteOrdersModal = (props: { order: Order; onSuccess: () => void }) => {
   const [showDialog, setShowDialog] = useState(false);
 
