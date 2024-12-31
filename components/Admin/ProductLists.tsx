@@ -5,7 +5,6 @@ import Link from "next/link";
 import parse from "html-react-parser";
 import EditProductModal from "@/components/Modal/EditProductModal";
 import DeleteProductModal from "@/components/Modal/DeleteProductModal";
-// import { Product } from "@/components/type";
 import {
   Pagination,
   PaginationContent,

@@ -7,37 +7,10 @@ import {
 } from "@/app/features/api/ProfileApi";
 import { Loader } from "../ui/Loader";
 
-// interface UserProfileData {
-//   firstName: string;
-//   lastName: string;
-//   _id: string;
-//   email: string;
-//   role: string;
-//   createdAt: string;
-//   updatedAt: string;
-//   status: string;
-//   displayPicture: {
-//     url: string;
-//   };
-// }
-
 const UserProfile: React.FC = () => {
   const { data: userProfileData, isLoading, error } = useUserProfileQuery();
   const [updateProfilePicture] = useUpdateProfilePictureMutation();
 
-  // const [userProfile, setUserProfile] = useState<UserProfileData>({
-  //   firstName: "",
-  //   lastName: "",
-  //   _id: "",
-  //   email: "",
-  //   role: "",
-  //   createdAt: "",
-  //   updatedAt: "",
-  //   status: "",
-  //   displayPicture: {
-  //     url: "",
-  //   },
-  // });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (
@@ -71,18 +44,6 @@ const UserProfile: React.FC = () => {
     return <div className="text-red-500">No profile data available</div>;
 
   const userProfile = userProfileData;
-
-  // useEffect(() => {
-  //   protectedApi
-  //     .get("/auth/me")
-  //     .then((response) => {
-  //       setUserProfile(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching user profile:", error);
-  //     });
-  // }, []);
 
   const profilePictureSection = (
     <div className="flex flex-col items-center mb-8">

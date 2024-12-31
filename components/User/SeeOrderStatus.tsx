@@ -11,29 +11,6 @@ import {
 import { useGetOrdersQuery } from "@/app/features/api/OrderApi";
 import { Loader } from "../ui/Loader";
 
-// interface User {
-//   _id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-// }
-
-// interface Item {
-//   product: string;
-//   quantity: number;
-//   price: number;
-//   _id: string;
-// }
-
-// interface Order {
-//   _id: string;
-//   user: User;
-//   items: Item[];
-//   totalAmount: number;
-//   status: string;
-//   createdAt: string;
-// }
-
 const statuses = [
   {
     key: "pending",
@@ -75,31 +52,6 @@ const statuses = [
 const SeeOrderStatus: React.FC = () => {
   const { data: orderData, isLoading, error } = useGetOrdersQuery();
   const orders = orderData?.orders || [];
-
-  // const [orders, setOrders] = useState<Order[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   fetchUserOrders();
-  // }, []);
-
-  // const fetchUserOrders = () => {
-  //   protectedApi
-  //     .get("/orders")
-  //     .then((response) => {
-  //       if (Array.isArray(response.data.orders)) {
-  //         setOrders(response.data.orders);
-  //       } else {
-  //         setError("Unexpected response format");
-  //       }
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       setError(error.message || "Failed to fetch orders");
-  //       setLoading(false);
-  //     });
-  // };
 
   if (isLoading) {
     return (
@@ -202,12 +154,6 @@ const SeeOrderStatus: React.FC = () => {
                                     ? { color: status.color, scale: 1.5 }
                                     : { color: "gray", opacity: 0.17 }
                                 }
-                                //   className={`z-10 w-8 h-8 flex items-center justify-center rounded-full border-2 shadow-md ${
-
-                                //     order.status === status.key
-                                //       ? `border-${status.color}-500 bg-${status.color}-500 text-white scale-150`
-                                //       : "text-gray-400 opacity-25"
-                                //   }`}
                               >
                                 {status.icon}
                               </div>
@@ -219,11 +165,6 @@ const SeeOrderStatus: React.FC = () => {
                                       ? { color: status.color, scale: 1 }
                                       : { color: "gray", opacity: 0.17 }
                                   }
-                                  // className={`text-sm font-bold ${
-                                  //   order.status === status.key
-                                  //     ? `text-${status.color}-700`
-                                  //     : "text-gray-400 dark:text-blue-500"
-                                  // }`}
                                 >
                                   {status.label}
                                 </div>

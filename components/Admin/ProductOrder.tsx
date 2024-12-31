@@ -5,67 +5,10 @@ import {
 } from "@/app/features/api/OrderApi";
 import { Loader } from "../ui/Loader";
 
-// interface User {
-//   _id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   role: string;
-//   createdAt: string;
-//   updatedAt: string;
-// }
-
-// interface Item {
-//   product: string;
-//   quantity: number;
-//   price: number;
-//   _id: string;
-// }
-
-// interface ShippingAddress {
-//   addressLine1: string;
-//   country: string;
-//   state: string;
-//   city: string;
-//   phone: number;
-//   email: string;
-//   zipCode: number;
-// }
-
-// interface Order {
-//   _id: string;
-//   user: User;
-//   items: Item[];
-//   totalAmount: number;
-//   status: string;
-//   createdAt: string;
-//   shippingAddress: ShippingAddress;
-// }
-
 const ProductOrder = () => {
   const { data: ordersData, isLoading, error } = useGetOrdersQuery();
   const orders = ordersData?.orders || [];
   const [updateOrderStatus] = useUpdateOrderStatusMutation();
-  // const [orders, setOrders] = useState<Order[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState<string | null>(null);
-
-  // useEffect(() => {
-  //   protectedApi
-  //     .get("/orders")
-  //     .then((response) => {
-  //       if (Array.isArray(response.data.orders)) {
-  //         setOrders(response.data.orders);
-  //       } else {
-  //         setError("Unexpected response format");
-  //       }
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       setError(error.message || "Failed to fetch orders");
-  //       setLoading(false);
-  //     });
-  // }, []);
 
   const handleStatusChange = async (orderId: string, newStatus: string) => {
     try {

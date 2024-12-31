@@ -18,24 +18,19 @@ import {
 import Image from "next/image";
 import { protectedApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
-
-export interface ImageData {
-  imgurUrl: string;
-  altText: string;
-  _id: string;
-}
+import { ImageType } from "../type";
 
 type Props = {
-  onImageSelect: (image: ImageData) => void;
-  onImageConfirm: (image: ImageData) => void;
+  onImageSelect: (image: ImageType) => void;
+  onImageConfirm: (image: ImageType) => void;
 };
 
 const ImageSelectionModal = (props: Props) => {
   const [showDialog, setShowDialog] = useState(false);
-  const [images, setImages] = useState<ImageData[]>([]);
+  const [images, setImages] = useState<ImageType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [selectedImage, setSelectedImage] = useState<ImageData | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
 
   useEffect(() => {
     protectedApi
@@ -63,7 +58,7 @@ const ImageSelectionModal = (props: Props) => {
     }
   };
 
-  const handleSelectImage = (image: ImageData) => {
+  const handleSelectImage = (image: ImageType) => {
     props.onImageSelect(image);
     setSelectedImage(image);
     props.onImageConfirm(image);

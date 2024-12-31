@@ -15,23 +15,7 @@ import ImageSelectionModal from "./ImageSelectionModal";
 import { Pencil } from "lucide-react";
 import Image from "next/image";
 import { useEditProductMutation } from "@/app/features/api/ProductsApi";
-
-interface Product {
-  _id: number;
-  title: string;
-  description: string;
-  price: number;
-  discountedPrice?: number;
-  image?: string;
-  imageId?: string;
-  pictures?: ImageData[];
-}
-
-export interface ImageData {
-  imgurUrl: string;
-  altText: string;
-  _id: string;
-}
+import { ImageType, Product } from "../type";
 
 interface EditProductProps {
   product: Product;
@@ -41,8 +25,8 @@ interface EditProductProps {
 const EditProductModal = (props: EditProductProps) => {
   const [showDialog, setShowDialog] = useState(false);
   const [editedProduct, setEditedProduct] = useState<Product>(props.product);
-  const [images, setImages] = useState<ImageData[]>([]);
-  const [confirmedImage, setConfirmedImage] = useState<ImageData | null>(null);
+  const [images, setImages] = useState<ImageType[]>([]);
+  const [confirmedImage, setConfirmedImage] = useState<ImageType | null>(null);
 
   const [editProduct] = useEditProductMutation();
 
@@ -150,8 +134,8 @@ const EditProductModal = (props: EditProductProps) => {
             )}
             <div className="flex flex-col justify-end">
               <ImageSelectionModal
-                onImageSelect={(image: ImageData) => setImages([image])}
-                onImageConfirm={(image: ImageData) => setConfirmedImage(image)}
+                onImageSelect={(image: ImageType) => setImages([image])}
+                onImageConfirm={(image: ImageType) => setConfirmedImage(image)}
               />
             </div>
 
