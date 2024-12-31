@@ -105,14 +105,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
   return (
     <AlertDialog open={showDialog} onOpenChange={setShowDialog}>
       <AlertDialogTrigger asChild>
-        <button
-          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold 
-                     py-2.5 px-4 rounded-lg transition-all duration-300 
-                     hover:shadow-lg hover:shadow-blue-500/30
-                     transform hover:-translate-y-0.5 
-                     focus:outline-none 
-                     mt-4 relative overflow-hidden"
-        >
+        <button className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30transform hover:-translate-y-0.5 focus:outline-none mt-4 relative overflow-hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -152,9 +145,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                 name="shipping.addressLine1"
                 value={orderData.shippingAddress.addressLine1}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                         placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                         focus:border-transparent transition duration-200"
+                className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                 required
               />
             </div>
@@ -172,9 +163,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                   name="shipping.city"
                   value={orderData.shippingAddress.city}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                           placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                   required
                 />
               </div>
@@ -190,9 +179,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                   name="shipping.state"
                   value={orderData.shippingAddress.state}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                           placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                   required
                 />
               </div>
@@ -212,9 +199,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                   type="tel"
                   value={orderData.shippingAddress.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                           placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                   required
                 />
               </div>
@@ -231,9 +216,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                   type="tel"
                   value={orderData.shippingAddress.zipCode}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                           placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                   required
                 />
               </div>
@@ -250,9 +233,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
                   type="email"
                   value={orderData.shippingAddress.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white
-                           placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500
-                           focus:border-transparent transition duration-200"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500focus:border-transparent transition duration-200"
                   required
                 />
               </div>
@@ -268,11 +249,7 @@ const SetOrderModal = (props: SetOrderModalProps) => {
             </AlertDialogCancel>
             <button
               type="submit"
-              className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600
-                       text-white font-semibold hover:from-blue-600 hover:to-blue-700
-                       transform hover:-translate-y-0.5 transition-all duration-200
-                       focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                       focus:ring-offset-gray-900"
+              className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold hover:from-blue-600 hover:to-blue-700transform hover:-translate-y-0.5 transition-all duration-200focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             >
               Confirm Order
             </button>
